@@ -1,6 +1,8 @@
 import React from "react";
+import { useState } from "react";
 
-function Body({ bgcolor ,startShortBreak,focusTime,startLongBreak}) {
+function Body({ bgcolor ,startShortBreak,focusTime,startLongBreak,count,message}) {
+
   return (
     <body>
       <div className=" relative bg-white bg-opacity-20 w-[480px] h-[320px] mt-[35px]  mx-[32%] rounded-md">
@@ -33,6 +35,14 @@ function Body({ bgcolor ,startShortBreak,focusTime,startLongBreak}) {
             long break
           </button>
         </div>
+      </div>
+
+      <div>
+        <p className="text-slate-50  mt-[10px] mx-[49%] text-xl  text-opacity-50">#{count}</p>
+        <p className="text-slate-50  mt-[3px] ml-[45%] text-xl  "> {message}</p>
+        
+
+
       </div>
     </body>
   );
