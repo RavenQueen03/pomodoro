@@ -9,6 +9,7 @@ import Next from "./components/images/next-white3.png";
 import addNotification from "react-push-notification";
 import { Notifications } from "react-push-notification";
 import TodoList from "./components/TodoList";
+import Todo from "./components/Todo";
 import Header from "./components/Header";
 
 function HomePage() {
@@ -24,18 +25,9 @@ function HomePage() {
   const [optionsVisibility, setOptionsVisibility] = useState("invisible");
 
   function startTimer() {
+    console.log("started");
     setStarted(true);
-    let interval = setInterval(() => {
-      clearInterval(interval);
-      if (seconds === 0) {
-        if (minutes !== 0) {
-          setSeconds(59);
-          setMinutes(minutes - 1);
-        }
-      } else {
-        setSeconds(seconds - 1);
-      }
-    }, 1000);
+
     const current = new Date();
     const time = current.toLocaleTimeString({
       hour: "2-digit",
@@ -129,9 +121,11 @@ function HomePage() {
   }
 
   function startShortBreak() {
+    setStarted(false);
+
     setMinutes(5);
     setSeconds(0);
-    setStarted(false);
+
     setButtonColor("text-blue-500");
     setbgColor("bg-blue-500");
     setMessage("Time for a break !");
@@ -149,13 +143,23 @@ function HomePage() {
   }
 
   const [play] = useSound(boopSfx, { volume: 0.25 });
-
   useEffect(() => {
+    let interval = null;
     if (started) {
-      startTimer();
-    } else {
-      clearInterval();
+      interval = setInterval(() => {
+        if (seconds === 0) {
+          if (minutes !== 0) {
+            setSeconds(59);
+            setMinutes(minutes - 1);
+          }
+        } else {
+          setSeconds(seconds - 1);
+        }
+      }, 1000);
+    } else if (!started && seconds !== 0) {
+      clearInterval(interval);
     }
+    return () => clearInterval(interval);
   }, [started, seconds]);
 
   const toggleStart = () => {
@@ -201,6 +205,7 @@ function HomePage() {
         optionsVisibility={optionsVisibility}
         setOptionsVisibility={setOptionsVisibility}
       />
+      <Todo  bgcolor={bgcolor} />
     </body>
   );
 }
